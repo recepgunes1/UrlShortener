@@ -1,0 +1,24 @@
+services:
+  buffer_api:
+    image: ${DOCKER_REGISTRY-}buffer_api
+    ports:
+      - 8080:80
+      - 4433:443
+    build:
+      context: .
+      dockerfile: src/Buffer/WebAPI/Dockerfile
+    links:
+      - rabbitmq
+      - postgres
+
+  shortener_api:
+    image: ${DOCKER_REGISTRY-}shortener_api
+    ports:
+      - 8081:80
+      - 4434:443
+    build:
+      context: .
+      dockerfile: src/Buffer/WebAPI/Dockerfile
+    links:
+      - rabbitmq
+      - postgres

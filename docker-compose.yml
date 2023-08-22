@@ -1,0 +1,5 @@
+version: '3.4'
+
+include:
+   - "external-services.yml"
+   - "internal-services.yml"
