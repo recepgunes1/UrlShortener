@@ -1,8 +1,10 @@
 ﻿using Dapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
+using Shared.Extensions;
 using System.Data;
 
-namespace Infrastructure.Queries
+namespace Buffer.Infrastructure.Queries
 {
     public record UrlEnumerableDto
     {
@@ -16,25 +18,30 @@ namespace Infrastructure.Queries
     public class GetAllUrlsFromBufferQueryHandler : IRequestHandler<GetAllUrlsFromBufferQuery, UrlEnumerableDto>
     {
         private readonly IDbConnection connection;
-        public GetAllUrlsFromBufferQueryHandler(IDbConnection _connection)
+        private readonly ILogger logger;
+
+        public GetAllUrlsFromBufferQueryHandler(IDbConnection _connection, ILogger<GetAllUrlsFromBufferQueryHandler> _logger)
         {
             connection = _connection;
+            logger = _logger;
         }
 
         public async Task<UrlEnumerableDto> Handle(GetAllUrlsFromBufferQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                var sql = "SELECT \"Id\", \"LongUrl\", \"ShortPath\", \"CreatedDate\", \"LastRequestedDate\", \"RequestCounter\", \"ExpireDate\", \"IsPublic\" " +
-                    "FROM public.\"Urls\" " +
-                    "WHERE  \"IsPublic\" = true;";
+                logger.LogInformation($"Request was handled by {nameof(GetAllUrlsFromBufferQueryHandler)}");
+                var sql = @"SELECT ""Id"", ""LongUrl"", ""ShortPath"", ""CreatedDate"", ""LastRequestedDate"", ""RequestCounter"", ""ExpireDate"", ""IsPublic"" 
+FROM public.""Urls"" 
+WHERE  ""IsPublic"" = true;";
                 var result = await connection.QueryAsync<UrlDto>(sql);
+                logger.LogInformation($"Executed Query:{Environment.NewLine}\t{sql}");
                 ArgumentNullException.ThrowIfNull(result);
                 return new() { Urls = result };
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                logger.LogError($"Exception Thrown:{Environment.NewLine}{ex.ToJsonString()}");
                 return new();
             }
         }

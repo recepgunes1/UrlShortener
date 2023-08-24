@@ -3,22 +3,52 @@ services:
     image: ${DOCKER_REGISTRY-}buffer_api
     ports:
       - 8080:80
-      - 4433:443
     build:
       context: .
       dockerfile: src/Buffer/WebAPI/Dockerfile
-    links:
-      - rabbitmq
-      - postgres
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - backend
 
   shortener_api:
     image: ${DOCKER_REGISTRY-}shortener_api
     ports:
       - 8081:80
-      - 4434:443
     build:
       context: .
-      dockerfile: src/Buffer/WebAPI/Dockerfile
-    links:
-      - rabbitmq
-      - postgres
+      dockerfile: src/Shortener/WebAPI/Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - backend
+
+  expiry_check_api:
+    image: ${DOCKER_REGISTRY-}expiry_check_api
+    ports:
+      - 8082:80
+    build:
+      context: .
+      dockerfile: src/ExpiryChecker/WebAPI/Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - backend
+
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    ports:
+      - 8083:80
+    build:
+      context: .
+      dockerfile: src/Gateway/Gateway.WebAPI/Dockerfile
+    depends_on:
+      - expiry_check_api
+      - shortener_api
+      - buffer_api
+    networks:
+      - backend
+      - fronted

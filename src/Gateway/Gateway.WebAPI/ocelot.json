@@ -1,0 +1,16 @@
+{
+  "Routes": {
+    {
+      "DownstreamPathTemplate": "",
+      "DownstreamScheme": "",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "",
+          "Port": ""
+        }
+      ],
+      "UpstreamPathTemplate": "",
+      "UpstreamHttpMethod": []
+    }
+  }
+}

@@ -9,6 +9,23 @@ services:
       POSTGRES_USER: Recep
       POSTGRES_PASSWORD: Password123.
       POSTGRES_DB: UrlShortener
+    networks:
+      - backend
+
+  mysql:
+    image: mysql:8.0-debian
+    ports:
+      - 3306:3306
+    volumes:
+      - ./init-scripts/Quartz:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_USER: Recep
+      MYSQL_PASSWORD: Password123.
+      MYSQL_DATABASE: Quartz
+      MYSQL_RANDOM_ROOT_PASSWORD: Yes
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    networks:
+      - backend
 
   rabbitmq:
     image: rabbitmq:3.12-management
@@ -19,7 +36,9 @@ services:
       - "5672:5672"
       - "15672:15672"
     healthcheck:
-       test: ["CMD", "curl", "-f", "http://localhost:15672"]
-       interval: 30s
-       timeout: 10s
-       retries: 5
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    networks:
+      - backend

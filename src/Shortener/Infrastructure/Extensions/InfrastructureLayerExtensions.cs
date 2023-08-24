@@ -1,15 +1,15 @@
-﻿using Infrastructure.Consumers;
-using Infrastructure.Context;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Shared.ConfigModels;
+using Shortener.Infrastructure.Consumers;
+using Shortener.Infrastructure.Context;
 using System.Data;
 using System.Reflection;
 
-namespace Infrastructure.Extensions
+namespace Shortener.Infrastructure.Extensions
 {
     public static class InfrastructureLayerExtensions
     {
@@ -19,7 +19,7 @@ namespace Infrastructure.Extensions
             {
                 p.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             });
-            
+
             service.AddScoped<IDbConnection>(_ => new NpgsqlConnection(configuration.GetConnectionString("default")));
 
             service.AddDbContext<AppDbContext>(p => p.UseNpgsql(configuration.GetConnectionString("default")));
@@ -37,10 +37,10 @@ namespace Infrastructure.Extensions
                         u.Username(rabbitMqCredentials.Username);
                         u.Password(rabbitMqCredentials.Password);
                     });
-                    cfg.ReceiveEndpoint("my_queue", e => e.ConfigureConsumer<ShortedUrlConsumer>(ctx));
+                    cfg.ReceiveEndpoint("shorten_url_service", e => e.ConfigureConsumer<ShortedUrlConsumer>(ctx));
                 });
             });
-            
+
             return service;
         }
     }

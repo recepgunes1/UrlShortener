@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shared.Entities;
 
-namespace Infrastructure.Context
+namespace Shortener.Infrastructure.Context
 {
     public class AppDbContext : DbContext
     {

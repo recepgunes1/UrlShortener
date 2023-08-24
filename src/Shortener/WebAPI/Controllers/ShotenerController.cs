@@ -1,6 +1,6 @@
-﻿using Infrastructure.Queries;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Shortener.Infrastructure.Queries;
 
 namespace WebAPI.Controllers
 {

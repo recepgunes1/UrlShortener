@@ -6,12 +6,13 @@ using Shared.ConfigModels;
 using System.Data;
 using System.Reflection;
 
-namespace Infrastructure.Extensions
+namespace Buffer.Infrastructure.Extensions
 {
     public static class InfrastructureLayerExtensions
     {
         public static IServiceCollection LoadInfrastructreLayer(this IServiceCollection service, IConfiguration configuration)
         {
+
             service.AddMediatR(p => p.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             service.AddScoped<IDbConnection>(_ => new NpgsqlConnection(configuration.GetConnectionString("default")));
             service.AddMassTransit(x => x.UsingRabbitMq((ctx, cfg) =>

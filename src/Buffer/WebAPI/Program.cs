@@ -1,6 +1,10 @@
-using Infrastructure.Extensions;
+using Buffer.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+
+builder.Logging.AddConsole();
 
 builder.Services.LoadInfrastructreLayer(builder.Configuration);
 
