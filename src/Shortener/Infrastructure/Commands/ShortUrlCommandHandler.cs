@@ -52,8 +52,17 @@ namespace Shortener.Infrastructure.Commands
             logger.LogInformation($"Request was handled by {nameof(ShortUrlCommandHandler)}");
 
             var url = await appDbContext.Urls.FirstOrDefaultAsync(p => p.LongUrl == request.Url);
-            var shortenerConfig = configuration.GetSection("Shortener").Get<ShortenerConfig>() ??
-                 throw new ArgumentException("Shortener section is broken in appsettings file.");
+            var section = configuration.GetSection("Shortener");
+            var shortenerConfig = new ShortenerConfig
+            {
+                CharSet = section["CharSet"]!,
+                Length = Convert.ToInt32(section["Length"]!)
+            };
+
+            if (shortenerConfig.CharSet == null || shortenerConfig.Length == 0)
+            {
+                throw new ArgumentException("Shortener section is broken in appsettings file.");
+            }
             var shortedPathBuilder = new StringBuilder();
             var random = new Random();
 

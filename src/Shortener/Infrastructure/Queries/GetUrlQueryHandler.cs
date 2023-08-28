@@ -1,9 +1,9 @@
 ﻿using Dapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Shared.Extensions;
 using System.Data;
 using System.Net;
-using System.Text.Json;
 
 namespace Shortener.Infrastructure.Queries
 {
@@ -51,8 +51,7 @@ WHERE  ""IsPublic"" = true AND (""LongUrl"" = @url OR ""ShortPath"" = @url);";
             }
             catch (Exception ex)
             {
-                var jsonException = JsonSerializer.Serialize(ex, new JsonSerializerOptions { WriteIndented = true });
-                logger.LogError($"Exception Thrown:{Environment.NewLine}{jsonException}");
+                logger.LogError($"Exception Thrown:{Environment.NewLine}{ex.ToJsonString()}");
                 return new();
             }
         }

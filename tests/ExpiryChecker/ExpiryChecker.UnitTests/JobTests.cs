@@ -16,10 +16,9 @@ namespace ExpiryChecker.UnitTests
         public JobTests()
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(":in-memory:");
+                .UseInMemoryDatabase(Guid.NewGuid().ToString());
             dbContext = new AppDbContext(optionsBuilder.Options);
-            if (!dbContext.Urls.Any())
-                dbContext.Urls.AddRange(testData);
+            dbContext.Urls.AddRange(testData);
             dbContext.SaveChanges();
         }
 
