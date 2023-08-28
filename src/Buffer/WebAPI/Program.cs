@@ -16,9 +16,12 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseSwagger();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
 
-app.UseSwaggerUI();
+    app.UseSwaggerUI();
+}
 
 app.UseRouting();
 

@@ -1,9 +1,6 @@
-﻿using Gateway.Infrastructure.Aggregators;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ocelot.DependencyInjection;
-using Ocelot.Multiplexer;
-
 
 namespace Gateway.Infrastructure.Extensions
 {
@@ -11,8 +8,13 @@ namespace Gateway.Infrastructure.Extensions
     {
         public static IServiceCollection LoadInfrastructreLayer(this IServiceCollection service, IConfiguration configuration)
         {
-            service.AddSingleton<IDefinedAggregator, BufferAndShortenerAggregator>();
-            service.AddOcelot();
+            var tempConfiguration = new ConfigurationBuilder()
+                .AddConfiguration(configuration)
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile($"ocelot.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+            service.AddOcelot(tempConfiguration);
             return service;
         }
     }

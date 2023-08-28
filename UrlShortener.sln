@@ -52,7 +52,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{91F4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gateway.WebAPI", "src\Gateway\Gateway.WebAPI\Gateway.WebAPI.csproj", "{C9DFA846-4667-4B6F-A30C-41AB0DD8C69C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway.Infrastructure", "src\Gateway\Gateway.Infrastructure\Gateway.Infrastructure.csproj", "{809C1D25-0159-4D56-9620-6D3990F987FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gateway.Infrastructure", "src\Gateway\Gateway.Infrastructure\Gateway.Infrastructure.csproj", "{809C1D25-0159-4D56-9620-6D3990F987FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

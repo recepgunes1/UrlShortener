@@ -1,5 +1,4 @@
 ﻿using Buffer.WebAPI.Controllers;
-using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,9 +13,8 @@ namespace Buffer.UnitTests
         {
             var mockMediator = new Mock<IMediator>();
             var mockLogger = new Mock<ILogger<BufferController>>();
-            var mockPublishEndpoint = new Mock<IPublishEndpoint>();
 
-            var controller = new BufferController(mockMediator.Object, mockLogger.Object, mockPublishEndpoint.Object);
+            var controller = new BufferController(mockMediator.Object, mockLogger.Object);
 
             var result = await controller.GetUrl("test.com");
 
@@ -29,13 +27,11 @@ namespace Buffer.UnitTests
         {
             var mockMediator = new Mock<IMediator>();
             var mockLogger = new Mock<ILogger<BufferController>>();
-            var mockPublishEndpoint = new Mock<IPublishEndpoint>();
 
-            var controller = new BufferController(mockMediator.Object, mockLogger.Object, mockPublishEndpoint.Object);
+            var controller = new BufferController(mockMediator.Object, mockLogger.Object);
 
             var result = await controller.GetAllUrls();
 
-            //
             Assert.IsType<OkObjectResult>(result);
         }
     }

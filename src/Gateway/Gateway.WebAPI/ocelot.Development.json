@@ -1,0 +1,43 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/buffer/get_url/{url}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5137
+        }
+      ],
+      "UpstreamPathTemplate": "/get_url/{url}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "GetUrl"
+    },
+    {
+      "DownstreamPathTemplate": "/api/shortener/publish_url",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5202
+        }
+      ],
+      "UpstreamPathTemplate": "/publish_url",
+      "UpstreamHttpMethod": [ "POST" ],
+      "Key": "PublishUrl"
+    },
+    {
+      "DownstreamPathTemplate": "/api/buffer/get_all_urls",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5137
+        }
+      ],
+      "UpstreamPathTemplate": "/get_all_urls",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "GetAllUrls"
+    }
+  ]
+}

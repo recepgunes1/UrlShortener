@@ -1,5 +1,4 @@
 using Buffer.Infrastructure.Queries;
-using MassTransit;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Data;

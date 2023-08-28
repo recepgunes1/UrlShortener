@@ -1,0 +1,45 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/buffer/get_url/{url}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "buffer_api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/get_url/{url}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "GetUrl"
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/shortener/publish_url",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "shortener_api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/publish_url",
+      "UpstreamHttpMethod": [ "POST" ],
+      "Key": "PublishUrl"
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/buffer/get_all_urls",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "buffer_api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/get_all_urls",
+      "UpstreamHttpMethod": [ "GET" ]
+    }
+
+  ]
+}

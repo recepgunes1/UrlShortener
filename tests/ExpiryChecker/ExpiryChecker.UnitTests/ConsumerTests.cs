@@ -10,9 +10,6 @@ namespace ExpiryChecker.UnitTests
         [Fact]
         public async void ExpiredUrlConsumer_ConsumesMessageCorrectly()
         {
-            //var mockLogger = new Mock<ILogger<ExpiredUrlConsumer>>();
-            //var mockScheduler = new Mock<ILogger<IScheduler>>();
-
             var harness = new InMemoryTestHarness();
             var consumerHarness = harness.Consumer<ExpiredUrlConsumer>();
 

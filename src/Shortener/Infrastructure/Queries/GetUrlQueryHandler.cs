@@ -1,8 +1,6 @@
 ﻿using Dapper;
-using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Shared.DTOs;
 using System.Data;
 using System.Net;
 using System.Text.Json;
@@ -29,12 +27,11 @@ namespace Shortener.Infrastructure.Queries
     {
         private readonly IDbConnection connection;
         private readonly ILogger logger;
-        private readonly IPublishEndpoint publishEndpoint;
-        public GetUrlQueryHandler(IDbConnection _connection, ILogger<GetUrlQueryHandler> _logger, IPublishEndpoint _publishEndpoint)
+
+        public GetUrlQueryHandler(IDbConnection _connection, ILogger<GetUrlQueryHandler> _logger)
         {
             connection = _connection;
             logger = _logger;
-            publishEndpoint = _publishEndpoint;
         }
 
         public async Task<UrlDto> Handle(GetUrlQuery request, CancellationToken cancellationToken)
@@ -50,12 +47,6 @@ WHERE  ""IsPublic"" = true AND (""LongUrl"" = @url OR ""ShortPath"" = @url);";
                 var result = await connection.QueryFirstAsync<UrlDto>(sql, parameters);
                 logger.LogInformation($"Executed Query: {sql}{Environment.NewLine}Params: {parameters}");
                 ArgumentNullException.ThrowIfNull(result);
-                if (string.IsNullOrEmpty(result.ShortPath))
-                {
-                    //publish shortener  consumer again
-                    await publishEndpoint.Publish(new ShortedUrlDto() { Url = result.LongUrl, ExpireDateTime = DateTime.UtcNow.AddSeconds(30), IsPublic = true });
-                    return new();
-                }
                 return result;
             }
             catch (Exception ex)

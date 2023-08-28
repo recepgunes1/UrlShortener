@@ -1,6 +1,5 @@
 ﻿using ExpiryChecker.Infrastructure.Consumers;
 using ExpiryChecker.Infrastructure.Context;
-using ExpiryChecker.Infrastructure.Jobs;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,12 +17,9 @@ namespace ExpiryChecker.Infrastructure.Extensions
         {
             service.AddDbContext<AppDbContext>(p => p.UseNpgsql(configuration.GetConnectionString("defaultForUrlShortener")));
             service.AddQuartz();
-            service.AddQuartzHostedService(opt =>
-            {
-                opt.WaitForJobsToComplete = true;
-            });
+            service.AddQuartzHostedService();
 
-            service.AddScoped<IScheduler>(_ => new StdSchedulerFactory(new NameValueCollection
+            service.AddSingleton<IScheduler>(_ => new StdSchedulerFactory(new NameValueCollection
             {
                 { "quartz.serializer.type", "json" },
                 { "quartz.jobStore.clustered", "true" },
@@ -31,14 +27,11 @@ namespace ExpiryChecker.Infrastructure.Extensions
                 { "quartz.jobStore.driverDelegateType", "Quartz.Impl.AdoJobStore.StdAdoDelegate, Quartz" },
                 { "quartz.jobStore.tablePrefix", "QRTZ_" },
                 { "quartz.jobStore.dataSource", "myDS" },
-                { "quartz.dataSource.myDS.connectionString", configuration.GetConnectionString("defaultForQuartz") },
-                { "quartz.dataSource.myDS.provider", "MySql" },
+                { "quartz.dataSource.myDS.connectionString", configuration.GetConnectionString("defaultForUrlQuartz")},
+                { "quartz.dataSource.myDS.provider", "Npgsql" },
                 { "quartz.jobStore.useProperties", "true" },
-                {"quartz.jobStore.performSchemaValidation", "false" }
-
+                { "quartz.jobStore.performSchemaValidation", "false" }
             }).GetScheduler().Result);
-
-            service.AddTransient<ExpireUrlJob>();
 
             service.AddMassTransit(config =>
             {
@@ -53,7 +46,7 @@ namespace ExpiryChecker.Infrastructure.Extensions
                         u.Username(rabbitMqCredentials.Username);
                         u.Password(rabbitMqCredentials.Password);
                     });
-                    cfg.ReceiveEndpoint("ExpiredUrlConsumer", e => e.ConfigureConsumer<ExpiredUrlConsumer>(ctx));
+                    cfg.ReceiveEndpoint("expired_url_consumer", e => e.ConfigureConsumer<ExpiredUrlConsumer>(ctx));
                 });
             });
             return service;

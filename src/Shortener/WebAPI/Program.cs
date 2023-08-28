@@ -2,6 +2,10 @@ using Shortener.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+
+builder.Logging.AddConsole();
+
 builder.Services.LoadInfrastructreLayer(builder.Configuration);
 
 builder.Services.AddControllers();
@@ -12,9 +16,12 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseSwagger();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
 
-app.UseSwaggerUI();
+    app.UseSwaggerUI();
+}
 
 app.UseRouting();
 

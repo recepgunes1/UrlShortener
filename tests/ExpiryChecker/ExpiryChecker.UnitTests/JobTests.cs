@@ -4,53 +4,59 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Quartz;
 using Quartz.Impl;
+using Shared.Entities;
 
 namespace ExpiryChecker.UnitTests
 {
     public class JobTests
     {
-        [Fact]
-        public async void ExpireUrlJob_Test()
+        private readonly AppDbContext dbContext;
+        private readonly List<Url> testData = new List<Url> { new Url { LongUrl = "http://test.com", ShortPath = "test123", ExpireDate = DateTime.Now } };
+
+        public JobTests()
         {
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
-                .Options;
+            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(":in-memory:");
+            dbContext = new AppDbContext(optionsBuilder.Options);
+            if (!dbContext.Urls.Any())
+                dbContext.Urls.AddRange(testData);
+            dbContext.SaveChanges();
+        }
 
-            var entity = new Shared.Entities.Url()
-            {
-                Id = Guid.NewGuid(),
-                LongUrl = "https://hello_world/",
-                ShortPath = "dakaSAdsa",
-                CreatedDate = DateTime.Now,
-                LastRequestedDate = null,
-                RequestCounter = 0,
-                ExpireDate = DateTime.Now.AddYears(10),
-                IsPublic = true,
-            };
+        [Fact]
+        public async Task Execute_WithExistingUrl_SetsPropertiesToNull()
+        {
+            // Arrange
 
-            List<Shared.Entities.Url> urlsData = new List<Shared.Entities.Url>();
+            var jobDataMap = new JobDataMap { { "url", "http://test.com" } };
+            var jobExecutionContextMock = new Mock<IJobExecutionContext>();
+            jobExecutionContextMock.Setup(m => m.JobDetail).Returns(new JobDetailImpl { JobDataMap = jobDataMap });
 
-            var mockSet = new Mock<DbSet<Shared.Entities.Url>>();
-            var mockAppDbContext = new Mock<AppDbContext>(options);
-            var mockJob = new Mock<ExpireUrlJob>(mockAppDbContext.Object);
-            var mockJobExecutionContext = new Mock<IJobExecutionContext>();
+            var job = new ExpireUrlJob(dbContext);
 
-            mockSet.As<IQueryable<Shared.Entities.Url>>().Setup(m => m.Provider).Returns(urlsData.AsQueryable().Provider);
-            mockSet.As<IQueryable<Shared.Entities.Url>>().Setup(m => m.Expression).Returns(urlsData.AsQueryable().Expression);
-            mockSet.As<IQueryable<Shared.Entities.Url>>().Setup(m => m.ElementType).Returns(urlsData.AsQueryable().ElementType);
-            mockSet.As<IQueryable<Shared.Entities.Url>>().Setup(m => m.GetEnumerator()).Returns(urlsData.GetEnumerator());
+            // Act
+            await job.Execute(jobExecutionContextMock.Object);
 
-            mockSet.Setup(d => d.Add(It.IsAny<Shared.Entities.Url>())).Callback<Shared.Entities.Url>(s => urlsData.Add(s));
+            // Assert
+            Assert.Null(testData.First().ShortPath);
+            Assert.Null(testData.First().ExpireDate);
+        }
 
-            mockAppDbContext.Setup(c => c.Urls).Returns(mockSet.Object);
+        [Fact]
+        public async Task Execute_WithNonExistingUrl_NoChangesMade()
+        {
+            var jobDataMap = new JobDataMap { { "url", "http://nonexistent.com" } };
+            var jobExecutionContextMock = new Mock<IJobExecutionContext>();
+            jobExecutionContextMock.Setup(m => m.JobDetail).Returns(new JobDetailImpl { JobDataMap = jobDataMap });
 
-            mockJobExecutionContext.Setup(c => c.JobDetail).Returns(new JobDetailImpl());
-            mockJobExecutionContext.Setup(j => j.JobDetail.JobDataMap).Returns(new JobDataMap { { "url", entity.LongUrl } });
+            var job = new ExpireUrlJob(dbContext);
 
-            await mockJob.Object.Execute(mockJobExecutionContext.Object);
+            // Act
+            await job.Execute(jobExecutionContextMock.Object);
 
-            Assert.Null(mockSet.Object.Find(entity.Id)!.ShortPath);
-            Assert.Null(mockSet.Object.Find(entity.Id)!.ExpireDate);
+            // Assert
+            var allUrls = dbContext.Urls.ToList();
+            Assert.Equal(testData.Count, allUrls.Count);
         }
     }
 }

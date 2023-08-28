@@ -6,6 +6,7 @@ using Npgsql;
 using Shared.ConfigModels;
 using Shortener.Infrastructure.Consumers;
 using Shortener.Infrastructure.Context;
+using Shortener.Infrastructure.Services;
 using System.Data;
 using System.Reflection;
 
@@ -40,6 +41,8 @@ namespace Shortener.Infrastructure.Extensions
                     cfg.ReceiveEndpoint("shorten_url_service", e => e.ConfigureConsumer<ShortedUrlConsumer>(ctx));
                 });
             });
+
+            service.AddHostedService<OutboxWorker>();
 
             return service;
         }
