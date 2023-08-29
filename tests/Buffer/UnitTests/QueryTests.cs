@@ -1,6 +1,4 @@
 using Buffer.Infrastructure.Queries;
-using Microsoft.Extensions.Logging;
-using Moq;
 using System.Data;
 
 namespace Buffer.UnitTests
