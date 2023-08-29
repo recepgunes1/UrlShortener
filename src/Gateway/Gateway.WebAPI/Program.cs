@@ -11,6 +11,8 @@ builder.Services.LoadInfrastructreLayer(builder.Configuration);
 
 var app = builder.Build();
 
+app.UseCors("VueCorsPolicy");
+
 await app.UseOcelot();
 
 app.Run();

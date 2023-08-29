@@ -1,8 +1,6 @@
 services:
   buffer_api:
     image: ${DOCKER_REGISTRY-}buffer_api
-    ports:
-      - 8080:80
     build:
       context: .
       dockerfile: src/Buffer/WebAPI/Dockerfile
@@ -14,8 +12,6 @@ services:
 
   shortener_api:
     image: ${DOCKER_REGISTRY-}shortener_api
-    ports:
-      - 8081:80
     build:
       context: .
       dockerfile: src/Shortener/WebAPI/Dockerfile
@@ -27,8 +23,6 @@ services:
 
   expiry_check_api:
     image: ${DOCKER_REGISTRY-}expiry_check_api
-    ports:
-      - 8082:80
     build:
       context: .
       dockerfile: src/ExpiryChecker/WebAPI/Dockerfile

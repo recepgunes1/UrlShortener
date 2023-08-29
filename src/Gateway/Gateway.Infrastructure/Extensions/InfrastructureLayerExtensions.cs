@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ocelot.DependencyInjection;
+using Ocelot.Values;
 
 namespace Gateway.Infrastructure.Extensions
 {
@@ -8,6 +9,18 @@ namespace Gateway.Infrastructure.Extensions
     {
         public static IServiceCollection LoadInfrastructreLayer(this IServiceCollection service, IConfiguration configuration)
         {
+            service.AddCors(options =>
+            {
+                options.AddPolicy("VueCorsPolicy", builder =>
+                {
+                    builder
+                        .WithOrigins("http://localhost:8080")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+
+
             var tempConfiguration = new ConfigurationBuilder()
                 .AddConfiguration(configuration)
                 .SetBasePath(Directory.GetCurrentDirectory())
