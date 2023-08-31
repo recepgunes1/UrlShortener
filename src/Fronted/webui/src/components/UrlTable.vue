@@ -1,33 +1,39 @@
 <template>
   <table class="table table-bordered table-stripped">
-    <thead v:if="urls">
+    <thead>
       <tr>
         <th>LongUrl</th>
         <th>ShortPath</th>
         <th>CreatedDate</th>
-        <th>LastReqestedDate</th>
-        <th>RequestCounter</th>
         <th>ExpireDate</th>
       </tr>
     </thead>
+    <tbody>
+      <tr v-for="(url, key) in urls" :key="key">
+        <td>
+          <a :href="url.longUrl">{{ url.longUrl }}</a>
+        </td>
+        <td>{{ url.shortPath }}</td>
+        <td>{{ url.createdDate }}</td>
+        <td>{{ url.expireDate }}</td>
+      </tr>
+    </tbody>
   </table>
 </template>
 
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import axios from "axios";
+import { defineComponent, PropType } from "vue";
 
+import Url from "../types/Url";
 
 export default defineComponent({
   name: "UrlTable",
-  setup() {
-    return {
-        urls: []
-    };
-  },
-  created() {
-      axios.get(`${process.env.VUE_APP_API_GATEWAY_URL}/get_all_urls`).then((response) => (this.urls = response.data))
-  },
+  props: {
+    urls: {
+      required: true,
+      type: Array as PropType<Url[]>,
+    }
+  }
 });
 </script>
