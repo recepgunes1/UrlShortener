@@ -6,7 +6,7 @@ builder.Logging.ClearProviders();
 
 builder.Logging.AddConsole();
 
-builder.Services.LoadInfrastructreLayer(builder.Configuration);
+builder.Services.LoadInfrastructureLayer(builder.Configuration);
 
 builder.Services.AddControllers();
 

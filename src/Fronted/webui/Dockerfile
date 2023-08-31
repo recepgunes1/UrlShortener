@@ -1,12 +1,20 @@
-FROM node:lts-alpine    
-WORKDIR /app
-# install vite globally
-RUN npm install -g @vue/cli
-# copy all filtes
-COPY . .    
-# install all deps
-RUN yarn install
+# Use the official Node.js image as the base image
+FROM node:14
 
-# vite default port
-EXPOSE 8080    
-CMD ["vue", "serve"]
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json before other files
+COPY package*.json ./
+
+# Install dependencies including devDependencies
+RUN npm install
+
+# Copy the rest of the application to the container
+COPY . .
+
+# Expose the default Vue.js development server port
+EXPOSE 8080
+
+# Command to run the app in development mode
+CMD ["npm", "run", "serve"]

@@ -12,19 +12,6 @@ services:
     networks:
       - backend
 
-  postgres_for_expiry_checker:
-    image: postgres:15
-    ports:
-      - 5433:5432
-    volumes:
-      - ./init-scripts/Quartz:/docker-entrypoint-initdb.d
-    environment:
-      POSTGRES_USER: Recep
-      POSTGRES_PASSWORD: Password123.
-      POSTGRES_DB: Quartz
-    networks:
-      - backend
-
   rabbitmq:
     image: rabbitmq:3.12-management
     environment:
@@ -38,5 +25,30 @@ services:
       interval: 10s
       timeout: 10s
       retries: 3
+    networks:
+      - backend
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+    ports:
+      - 9200:9200
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      - xpack.monitoring.enabled=true
+      - xpack.watcher.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    networks:
+      - backend
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.9.2
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_URL=http://localhost:9200
     networks:
       - backend

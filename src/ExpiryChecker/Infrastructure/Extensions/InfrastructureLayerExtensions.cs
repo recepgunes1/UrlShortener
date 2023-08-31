@@ -13,25 +13,14 @@ namespace ExpiryChecker.Infrastructure.Extensions
 {
     public static class InfrastructureLayerExtensions
     {
-        public static IServiceCollection LoadInfrastructreLayer(this IServiceCollection service, IConfiguration configuration)
+        public static IServiceCollection LoadInfrastructureLayer(this IServiceCollection service, IConfiguration configuration)
         {
             service.AddDbContext<AppDbContext>(p => p.UseNpgsql(configuration.GetConnectionString("defaultForUrlShortener")));
             service.AddQuartz();
             service.AddQuartzHostedService();
 
-            service.AddSingleton<IScheduler>(_ => new StdSchedulerFactory(new NameValueCollection
-            {
-                { "quartz.serializer.type", "json" },
-                { "quartz.jobStore.clustered", "true" },
-                { "quartz.jobStore.type", "Quartz.Impl.AdoJobStore.JobStoreTX, Quartz" },
-                { "quartz.jobStore.driverDelegateType", "Quartz.Impl.AdoJobStore.StdAdoDelegate, Quartz" },
-                { "quartz.jobStore.tablePrefix", "QRTZ_" },
-                { "quartz.jobStore.dataSource", "myDS" },
-                { "quartz.dataSource.myDS.connectionString", configuration.GetConnectionString("defaultForUrlQuartz")},
-                { "quartz.dataSource.myDS.provider", "Npgsql" },
-                { "quartz.jobStore.useProperties", "true" },
-                { "quartz.jobStore.performSchemaValidation", "false" }
-            }).GetScheduler().Result);
+            service.AddSingleton<IScheduler>(_ => new StdSchedulerFactory(new NameValueCollection()
+            ).GetScheduler().Result);
 
             service.AddMassTransit(config =>
             {

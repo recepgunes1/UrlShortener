@@ -14,7 +14,7 @@ namespace Shortener.Infrastructure.Extensions
 {
     public static class InfrastructureLayerExtensions
     {
-        public static IServiceCollection LoadInfrastructreLayer(this IServiceCollection service, IConfiguration configuration)
+        public static IServiceCollection LoadInfrastructureLayer(this IServiceCollection service, IConfiguration configuration)
         {
             service.AddMediatR(p =>
             {

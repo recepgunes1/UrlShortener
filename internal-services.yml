@@ -58,3 +58,6 @@ services:
       - apigateway
     networks:
       - fronted
+    volumes:
+      - ./src/Fronted/webui:/app
+      - /app/node_modules
