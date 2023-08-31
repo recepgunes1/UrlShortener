@@ -14,6 +14,19 @@
       "Key": "GetUrl"
     },
     {
+      "DownstreamPathTemplate": "/api/buffer/get_all_urls",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5137
+        }
+      ],
+      "UpstreamPathTemplate": "/get_all_urls",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "GetAllUrls"
+    },
+    {
       "DownstreamPathTemplate": "/api/shortener/publish_url",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -27,17 +40,17 @@
       "Key": "PublishUrl"
     },
     {
-      "DownstreamPathTemplate": "/api/buffer/get_all_urls",
+      "DownstreamPathTemplate": "/api/shortener/redirect/{shortPath}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5137
+          "Port": 5202
         }
       ],
-      "UpstreamPathTemplate": "/get_all_urls",
+      "UpstreamPathTemplate": "/redirect/{shortPath}",
       "UpstreamHttpMethod": [ "GET" ],
-      "Key": "GetAllUrls"
+      "Key": "ReachUrl"
     }
   ]
 }

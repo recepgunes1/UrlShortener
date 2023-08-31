@@ -1,10 +1,13 @@
 ﻿using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
 using Shared.Extensions;
+using Shortener.Infrastructure.Commands;
 using Shortener.Infrastructure.Context;
 using Shortener.Infrastructure.Models;
 using System.Text.Json;
+
 
 namespace WebAPI.Controllers
 {
@@ -14,11 +17,13 @@ namespace WebAPI.Controllers
     {
         private readonly ILogger logger;
         private readonly AppDbContext appDbContext;
+        private readonly IMediator mediator;
 
-        public ShortenerController(ILogger<ShortenerController> _logger, AppDbContext _appDbContext)
+        public ShortenerController(ILogger<ShortenerController> _logger, AppDbContext _appDbContext, IMediator _mediator)
         {
             logger = _logger;
             appDbContext = _appDbContext;
+            mediator = _mediator;
         }
 
         [HttpPost]
@@ -48,6 +53,17 @@ namespace WebAPI.Controllers
                 logger.LogWarning(ex.ToJsonString());
                 return BadRequest();
             }
+
         }
+
+
+        [HttpGet]
+        [Route("redirect/{shortPath}")]
+        public async Task<IActionResult> ReachUrl(string shortPath)
+        {
+            logger.LogInformation($"{shortPath} was send to command");
+            return Ok(await mediator.Send(new ReachUrlCommand(shortPath)));
+        }
+
     }
 }

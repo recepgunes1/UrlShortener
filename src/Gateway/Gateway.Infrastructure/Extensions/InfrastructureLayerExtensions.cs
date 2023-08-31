@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ocelot.DependencyInjection;
-using Ocelot.Values;
 
 namespace Gateway.Infrastructure.Extensions
 {
@@ -19,7 +18,6 @@ namespace Gateway.Infrastructure.Extensions
                         .AllowAnyHeader();
                 });
             });
-
 
             var tempConfiguration = new ConfigurationBuilder()
                 .AddConfiguration(configuration)

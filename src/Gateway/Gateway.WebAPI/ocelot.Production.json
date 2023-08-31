@@ -13,7 +13,19 @@
       "UpstreamHttpMethod": [ "GET" ],
       "Key": "GetUrl"
     },
-
+    {
+      "DownstreamPathTemplate": "/api/buffer/get_all_urls",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "buffer_api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/get_all_urls",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "GetAllUrls"
+    },
     {
       "DownstreamPathTemplate": "/api/shortener/publish_url",
       "DownstreamScheme": "http",
@@ -27,19 +39,18 @@
       "UpstreamHttpMethod": [ "POST" ],
       "Key": "PublishUrl"
     },
-
     {
-      "DownstreamPathTemplate": "/api/buffer/get_all_urls",
+      "DownstreamPathTemplate": "/api/shortener/redirect/{shortPath}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "buffer_api",
+          "Host": "shortener_api",
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/get_all_urls",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamPathTemplate": "/redirect/{shortPath}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "ReachUrl"
     }
-
   ]
 }

@@ -34,8 +34,6 @@ services:
 
   apigateway:
     image: ${DOCKER_REGISTRY-}apigateway
-    ports:
-      - 8083:80
     build:
       context: .
       dockerfile: src/Gateway/Gateway.WebAPI/Dockerfile
@@ -47,4 +45,16 @@ services:
       - buffer_api
     networks:
       - backend
+      - fronted
+
+  webui:
+    image: ${DOCKER_REGISTRY-}webui
+    ports:
+      - 8080:8080
+    build:
+      context: .
+      dockerfile: src/Fronted/webui/Dockerfile
+    depends_on:
+      - apigateway
+    networks:
       - fronted

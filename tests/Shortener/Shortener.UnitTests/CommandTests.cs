@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Shared.ConfigModels;
 using Shortener.Infrastructure.Commands;
 using Shortener.Infrastructure.Context;
 
