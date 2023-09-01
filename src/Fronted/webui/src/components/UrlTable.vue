@@ -34,6 +34,11 @@ export default defineComponent({
       required: true,
       type: Array as PropType<Url[]>,
     }
+  },
+  mounted(){
+    setInterval(() => {
+      this.$forceUpdate();
+    }, 10000)
   }
 });
 </script>
