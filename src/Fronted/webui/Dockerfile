@@ -1,20 +1,29 @@
-# Use the official Node.js image as the base image
-FROM node:14
+# Use a Node.js base image
+FROM node:14 as build-stage
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json before other files
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies including devDependencies
+# Install project dependencies
 RUN npm install
 
-# Copy the rest of the application to the container
+# Copy the rest of the application code
 COPY . .
 
-# Expose the default Vue.js development server port
-EXPOSE 8080
+# Build the Vue application
+RUN npm run build
 
-# Command to run the app in development mode
-CMD ["npm", "run", "serve"]
+# Production image
+FROM nginx:1.21
+
+# Copy the built Vue application from the build-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]

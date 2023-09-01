@@ -4,6 +4,10 @@ networks:
    backend:
    fronted:
 
+volumes:
+  esdata:
+    driver: local
+
 include:
    - "external-services.yml"
    - "internal-services.yml"

@@ -52,7 +52,7 @@ services:
   webui:
     image: ${DOCKER_REGISTRY-}webui
     ports:
-      - 8080:8080
+      - 8080:80
     build:
       context: .
       dockerfile: src/Fronted/webui/Dockerfile
@@ -62,4 +62,3 @@ services:
       - fronted
     volumes:
       - ./src/Fronted/webui:/app
-      - /app/node_modules

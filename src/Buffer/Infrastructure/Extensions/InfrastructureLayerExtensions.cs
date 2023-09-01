@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Logger.Extensions;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
@@ -26,6 +27,9 @@ namespace Buffer.Infrastructure.Extensions
                 });
                 cfg.ConfigureEndpoints(ctx);
             }));
+
+            service.AddElasticSearch(configuration);
+
             return service;
         }
     }

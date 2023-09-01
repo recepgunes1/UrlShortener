@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Logger.Extensions;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,6 +44,8 @@ namespace Shortener.Infrastructure.Extensions
             });
 
             service.AddHostedService<OutboxWorker>();
+
+            service.AddElasticSearch(configuration);
 
             return service;
         }

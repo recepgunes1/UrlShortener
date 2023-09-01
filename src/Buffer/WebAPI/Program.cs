@@ -25,6 +25,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 
+app.Use((context, next) =>
+{
+    context.Request.EnableBuffering();
+    return next();
+});
+
 app.MapControllers();
 
 app.Run();

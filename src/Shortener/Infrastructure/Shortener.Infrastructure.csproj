@@ -18,6 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\Utils\Logger\Logger.csproj" />
 	  <ProjectReference Include="..\..\Utils\Shared\Shared.csproj" />
 	</ItemGroup>
 
