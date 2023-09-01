@@ -63,7 +63,6 @@ namespace Shortener.Infrastructure.Services
                     _logger.LogWarning(ex.ToJsonString());
                 }
             }
-
             await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
         }
     }

@@ -33,7 +33,9 @@ namespace Buffer.Infrastructure.Queries
                 logger.LogInformation($"Request was handled by {nameof(GetAllUrlsFromBufferQueryHandler)}");
                 var sql = @"SELECT ""Id"", ""LongUrl"", ""ShortPath"", ""CreatedDate"", ""LastRequestedDate"", ""RequestCounter"", ""ExpireDate"", ""IsPublic"" 
 FROM public.""Urls"" 
-WHERE  ""IsPublic"" = true;";
+WHERE  ""IsPublic"" = true
+ORDER BY ""CreatedDate"" DESC;
+";
                 var result = await connection.QueryAsync<UrlDto>(sql);
                 logger.LogInformation($"Executed Query:{Environment.NewLine}\t{sql}");
                 ArgumentNullException.ThrowIfNull(result);

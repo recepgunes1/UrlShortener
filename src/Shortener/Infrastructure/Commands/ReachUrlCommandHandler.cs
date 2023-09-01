@@ -30,12 +30,12 @@ namespace Shortener.Infrastructure.Commands
             var url = await dbContext.Urls.FirstOrDefaultAsync(p => p.ShortPath == request.ShortPath);
             if (url == null)
             {
-                return new() { Message = "an error occurred" };
+                return new() { Message = string.Empty };
             }
             url.RequestCounter++;
             url.LastRequestedDate = DateTime.UtcNow;
             await dbContext.SaveChangesAsync();
-            return new() { Message = "it is okay" };
+            return new() { Message = url.LongUrl };
         }
     }
 }
