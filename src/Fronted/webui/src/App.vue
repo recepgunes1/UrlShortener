@@ -2,7 +2,7 @@
   <div class="container border mt-5 rounded bg-light">
     <div class="row mt-5">
       <div class="col">
-        <SearchBar />
+        <SearchBar @request-refresh="refreshUrlTable" />
       </div>
     </div>
     <div class="row my-5">
@@ -12,7 +12,7 @@
     </div>
     <div class="row">
       <div class="col">
-        <UrlTable :urls="urls" />
+        <UrlTable ref="UrlTableRef" />
       </div>
     </div>
   </div>
@@ -20,8 +20,6 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-
-import axios from "axios";
 
 import SearchBar from "./components/SearchBar.vue";
 import UrlTable from "./components/UrlTable.vue";
@@ -32,22 +30,18 @@ import "bootstrap/dist/js/bootstrap.js";
 
 export default defineComponent({
   name: "App",
+  methods: {
+    refreshUrlTable() {
+      const urlTableRef = this.$refs.UrlTableRef as any; // or a more specific type if you have one
+      if (urlTableRef && typeof urlTableRef.fetchUrls === 'function') {
+        urlTableRef.fetchUrls();
+      }
+    }
+  },
   components: {
     SearchBar,
     UrlTable,
     UrlConfiguration,
-  },
-  setup() {
-    const urls = ref([]);
-
-    axios
-      .get(`${process.env.VUE_APP_API_GATEWAY_URL}/get_all_urls`)
-      .then((response) => {
-        urls.value = response.data;
-      });
-    return {
-      urls,
-    };
   },
 });
 </script>

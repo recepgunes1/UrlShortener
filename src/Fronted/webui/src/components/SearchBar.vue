@@ -1,27 +1,13 @@
 <template>
   <div class="text-center">
     <div class="input-group w-auto">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Enter a short path or url"
-        v-model="input"
-      />
-      <button
-        class="btn btn-primary"
-        type="button"
-        @click.prevent="GetOrPublishUrl(input.toString())"
-      >
+      <input type="text" class="form-control" placeholder="Enter a short path or url" v-model="input" />
+      <button class="btn btn-primary" type="button" @click.prevent="GetOrPublishUrl(input.toString())">
         Search
       </button>
     </div>
-    <UrlDetail v-if="url != null && url.longUrl" :url-with-detail="url" />
-    <img
-      v-if="isStarted"
-      class="mt-4 img-fluid"
-      src="../assets/loading-gif.gif"
-      style="width: 48px"
-    />
+    <UrlDetail v-if="url != null && url.longUrl" :url-with-detail="url" @detail-shown="refreshTable" />
+    <img v-if="isStarted" class="mt-4 img-fluid" src="../assets/loading-gif.gif" style="width: 48px" />
   </div>
 </template>
 
@@ -29,6 +15,8 @@
 import axios from "axios";
 import { defineComponent } from "vue";
 import Url from "../types/Url";
+import UrlTableRef from "../types/UrlTableRef";
+
 import UrlDetail from "./UrlDetail.vue";
 
 export default defineComponent({
@@ -44,6 +32,9 @@ export default defineComponent({
     };
   },
   methods: {
+    refreshTable() {
+  this.$emit('request-refresh');
+},
     GetOrPublishUrl(input: string) {
       this.isStarted = true; // Start loading
 
@@ -73,8 +64,7 @@ export default defineComponent({
             setTimeout(() => {
               axios
                 .get(
-                  `${
-                    process.env.VUE_APP_API_GATEWAY_URL
+                  `${process.env.VUE_APP_API_GATEWAY_URL
                   }/get_url/${encodeURIComponent(input)}`
                 )
                 .then((final_response) => {

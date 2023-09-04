@@ -32,6 +32,14 @@ app.Use(async (context, next) =>
 
 app.UseRouting();
 
+app.Use((context, next) =>
+{
+    context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+    context.Response.Headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE";
+    context.Response.Headers["Access-Control-Allow-Headers"] = "*";
+    return next.Invoke();
+});
+
 app.UseCors(p =>
 {
     p.AllowAnyOrigin()

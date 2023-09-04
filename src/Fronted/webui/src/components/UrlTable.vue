@@ -1,5 +1,5 @@
 <template>
-  <table class="table table-bordered table-stripped">
+  <table class="table table-bordered table-striped">
     <thead>
       <tr>
         <th>LongUrl</th>
@@ -9,11 +9,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(url, key) in urls" :key="key">
+      <tr v-for="(url, key) in fetchedUrls" :key="key">
         <td>
           <a :href="url.longUrl">{{ url.longUrl }}</a>
         </td>
-        <td>{{ url.shortPath }}</td>
+        <td><a :href="`${currentUrl}${url.shortPath}`" target="_blank">{{ url.shortPath }}</a></td>
         <td>{{ url.createdDate }}</td>
         <td>{{ url.expireDate }}</td>
       </tr>
@@ -21,9 +21,9 @@
   </table>
 </template>
 
-
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref, onMounted } from "vue";
+import axios from "axios";
 
 import Url from "../types/Url";
 
@@ -31,14 +31,29 @@ export default defineComponent({
   name: "UrlTable",
   props: {
     urls: {
-      required: true,
       type: Array as PropType<Url[]>,
+      default: () => ([]),
     }
   },
-  mounted(){
-    setInterval(() => {
-      this.$forceUpdate();
-    }, 10000)
-  }
+  setup() {
+    const currentUrl = ref(window.location.href);
+    const fetchedUrls = ref<Url[]>([]);
+
+    const fetchUrls = async () => {
+      try {
+        const response = await axios.get(`${process.env.VUE_APP_API_GATEWAY_URL}/get_all_urls`);
+        fetchedUrls.value = response.data;
+      } catch (error) {
+        console.error("Failed to fetch URLs:", error);
+      }
+    };
+    
+    onMounted(fetchUrls);
+
+    return {
+      currentUrl,
+      fetchedUrls
+    };
+  },
 });
 </script>
