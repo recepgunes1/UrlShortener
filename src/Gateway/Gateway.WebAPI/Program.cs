@@ -9,9 +9,16 @@ builder.Logging.AddConsole();
 
 builder.Services.LoadInfrastructreLayer(builder.Configuration);
 
+builder.Services.AddCors();
+
 var app = builder.Build();
 
-app.UseCors("VueCorsPolicy");
+app.UseCors(p =>
+{
+    p.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+});
 
 await app.UseOcelot();
 

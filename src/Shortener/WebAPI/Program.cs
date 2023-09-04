@@ -14,21 +14,29 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-
     app.UseSwaggerUI();
 }
 
-app.UseRouting();
-
-app.Use((context, next) =>
+app.Use(async (context, next) =>
 {
     context.Request.EnableBuffering();
-    return next();
+    await next();
+});
+
+app.UseRouting();
+
+app.UseCors(p =>
+{
+    p.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader();
 });
 
 app.MapControllers();

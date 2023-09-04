@@ -8,17 +8,6 @@ namespace Gateway.Infrastructure.Extensions
     {
         public static IServiceCollection LoadInfrastructreLayer(this IServiceCollection service, IConfiguration configuration)
         {
-            service.AddCors(options =>
-            {
-                options.AddPolicy("VueCorsPolicy", builder =>
-                {
-                    builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials();
-                });
-            });
 
             var tempConfiguration = new ConfigurationBuilder()
                 .AddConfiguration(configuration)
@@ -28,7 +17,7 @@ namespace Gateway.Infrastructure.Extensions
                 .Build();
 
             service.AddOcelot(tempConfiguration);
-            
+
             return service;
         }
     }

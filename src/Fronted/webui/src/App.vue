@@ -41,12 +41,7 @@ export default defineComponent({
     const urls = ref([]);
 
     axios
-      .get(`${process.env.VUE_APP_API_GATEWAY_URL}/get_all_urls`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-      })
+      .get(`${process.env.VUE_APP_API_GATEWAY_URL}/get_all_urls`)
       .then((response) => {
         urls.value = response.data;
       });

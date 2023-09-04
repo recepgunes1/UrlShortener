@@ -22,7 +22,7 @@ FROM nginx:1.25-alpine
 
 # Copy the built Vue application from the build-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-
+COPY production_nginx.conf /etc/nginx/conf.d/default.conf
 # Expose port 80
 EXPOSE 80
 

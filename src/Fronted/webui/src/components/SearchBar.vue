@@ -51,13 +51,7 @@ export default defineComponent({
         .get(
           `${process.env.VUE_APP_API_GATEWAY_URL}/get_url/${encodeURIComponent(
             input
-          )}`,
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Credentials": true,
-            },
-          }
+          )}`
         )
         .then((response) => {
           this.url = response.data;
@@ -65,10 +59,6 @@ export default defineComponent({
             return axios.post(
               `${process.env.VUE_APP_API_GATEWAY_URL}/publish_url`,
               {
-                headers: {
-                  "Access-Control-Allow-Origin": "*",
-                  "Access-Control-Allow-Credentials": true,
-                },
                 Url: input,
                 ExpireDate: this.$store.state.number,
                 IsPublic: this.$store.state.isPublic,
@@ -85,13 +75,7 @@ export default defineComponent({
                 .get(
                   `${
                     process.env.VUE_APP_API_GATEWAY_URL
-                  }/get_url/${encodeURIComponent(input)}`,
-                  {
-                    headers: {
-                      "Access-Control-Allow-Origin": "*",
-                      "Access-Control-Allow-Credentials": true,
-                    },
-                  }
+                  }/get_url/${encodeURIComponent(input)}`
                 )
                 .then((final_response) => {
                   this.url = final_response.data;
