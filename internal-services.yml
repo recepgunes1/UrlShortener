@@ -54,11 +54,10 @@ services:
     ports:
       - 8080:80
     build:
-      context: .
-      dockerfile: src/Fronted/webui/Dockerfile
+      context: src/Fronted/webui
+      dockerfile: Dockerfile
     depends_on:
       - apigateway
     networks:
       - fronted
-    volumes:
-      - ./src/Fronted/webui:/app
+

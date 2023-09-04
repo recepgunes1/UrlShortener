@@ -13,9 +13,10 @@ namespace Gateway.Infrastructure.Extensions
                 options.AddPolicy("VueCorsPolicy", builder =>
                 {
                     builder
-                        .WithOrigins("http://localhost:8080")
+                        .AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader();
+                        .AllowAnyHeader()
+                        .AllowCredentials();
                 });
             });
 
@@ -25,7 +26,9 @@ namespace Gateway.Infrastructure.Extensions
                 .AddJsonFile($"ocelot.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
+
             service.AddOcelot(tempConfiguration);
+            
             return service;
         }
     }
