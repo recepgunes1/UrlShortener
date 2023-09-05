@@ -13,7 +13,11 @@
         <td>
           <a :href="url.longUrl" target="_blank">{{ url.longUrl }}</a>
         </td>
-        <td><a :href="`${currentUrl}${url.shortPath}`" target="_blank">{{ url.shortPath }}</a></td>
+        <td>
+          <a :href="`${currentUrl}${url.shortPath}`" target="_blank">{{
+            currentUrl + url.shortPath
+          }}</a>
+        </td>
         <td>{{ url.createdDate }}</td>
         <td>{{ url.expireDate }}</td>
       </tr>
@@ -32,8 +36,8 @@ export default defineComponent({
   props: {
     urls: {
       type: Array as PropType<Url[]>,
-      default: () => ([]),
-    }
+      default: () => [],
+    },
   },
   setup() {
     const currentUrl = ref(window.location.href);
@@ -41,18 +45,20 @@ export default defineComponent({
 
     const fetchUrls = async () => {
       try {
-        const response = await axios.get(`${process.env.VUE_APP_API_GATEWAY_URL}/get_all_urls`);
+        const response = await axios.get(
+          `${process.env.VUE_APP_API_GATEWAY_URL}/get_all_urls`
+        );
         fetchedUrls.value = response.data;
       } catch (error) {
         console.error("Failed to fetch URLs:", error);
       }
     };
-    
+
     onMounted(fetchUrls);
 
     return {
       currentUrl,
-      fetchedUrls
+      fetchedUrls,
     };
   },
 });

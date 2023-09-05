@@ -1,5 +1,8 @@
 <template>
-  <div class="alert alert-warning alert-dismissible fade show mt-5" role="alert">
+  <div
+    class="alert alert-warning alert-dismissible fade show mt-5"
+    role="alert"
+  >
     <table class="table table-warning">
       <thead class="thead-dark text-center">
         <tr>
@@ -9,11 +12,21 @@
       <tbody>
         <tr>
           <th scope="row">Long Url</th>
-          <td><a :href="urlWithDetail.longUrl" :title="urlWithDetail.longUrl">{{ urlWithDetail.longUrl }}</a></td>
+          <td>
+            <a :href="urlWithDetail.longUrl" :title="urlWithDetail.longUrl">{{
+              urlWithDetail.longUrl
+            }}</a>
+          </td>
         </tr>
         <tr>
           <th scope="row">Short Path</th>
-          <td><a :href="`${currentUrl}${urlWithDetail.shortPath}`" target="_blank">{{ urlWithDetail.shortPath }}</a></td>
+          <td>
+            <a
+              :href="`${currentUrl}${urlWithDetail.shortPath}`"
+              target="_blank"
+              >{{ currentUrl + urlWithDetail.shortPath }}</a
+            >
+          </td>
         </tr>
         <tr>
           <th scope="row">Created Date</th>
@@ -25,7 +38,12 @@
         </tr>
       </tbody>
     </table>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
   </div>
 </template>
 
@@ -43,7 +61,7 @@ export default defineComponent({
   },
   setup(p, { emit }) {
     onMounted(() => {
-      emit('detail-shown');
+      emit("detail-shown");
     });
     const currentUrl = ref(window.location.href);
     return { currentUrl };
