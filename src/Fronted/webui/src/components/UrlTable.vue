@@ -11,7 +11,7 @@
     <tbody>
       <tr v-for="(url, key) in fetchedUrls" :key="key">
         <td>
-          <a :href="url.longUrl">{{ url.longUrl }}</a>
+          <a :href="url.longUrl" target="_blank">{{ url.longUrl }}</a>
         </td>
         <td><a :href="`${currentUrl}${url.shortPath}`" target="_blank">{{ url.shortPath }}</a></td>
         <td>{{ url.createdDate }}</td>

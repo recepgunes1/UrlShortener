@@ -13,7 +13,7 @@
         </tr>
         <tr>
           <th scope="row">Short Path</th>
-          <td><a :href="`${currentUrl}${urlWithDetail.shortPath}`" :title="urlWithDetail.shortPath">{{ urlWithDetail.shortPath }}</a></td>
+          <td><a :href="`${currentUrl}${urlWithDetail.shortPath}`" target="_blank">{{ urlWithDetail.shortPath }}</a></td>
         </tr>
         <tr>
           <th scope="row">Created Date</th>

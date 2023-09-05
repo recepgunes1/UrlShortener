@@ -2,10 +2,6 @@ using Shortener.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Logging.ClearProviders();
-
-builder.Logging.AddConsole();
-
 builder.Services.LoadInfrastructureLayer(builder.Configuration);
 
 builder.Services.AddControllers();

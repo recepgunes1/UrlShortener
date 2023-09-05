@@ -28,7 +28,7 @@ namespace Logger.Services
             string indexName = LogIndexType.error_log.ToString();
             if (!client.Indices.Exists(indexName).Exists)
             {
-                client.Indices.Create(indexName, x => x.Map<ActionLogModel>(m => m.AutoMap()).Aliases(a => a.Alias(indexName)));
+                client.Indices.Create(indexName, x => x.Map<ErrorLogModel>(m => m.AutoMap()).Aliases(a => a.Alias(indexName)));
             }
             client.Index(errorModel, x => x.Index(indexName));
         }

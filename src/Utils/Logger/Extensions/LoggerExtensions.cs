@@ -15,7 +15,8 @@ namespace Logger.Extensions
             var settings = new ConnectionSettings(new Uri(url))
                 .EnableDebugMode()
                 .PrettyJson()
-                .RequestTimeout(TimeSpan.FromMinutes(2));
+                .RequestTimeout(TimeSpan.FromMinutes(2))
+                .EnableDebugMode();
 
             var client = new ElasticClient(settings);
 
