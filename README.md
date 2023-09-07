@@ -8,7 +8,7 @@ The URL Shortener is a web-based tool designed to take longer URLs and convert t
 In Kibana, there isn't an automated mechanism to generate indexes. You'll need to manually create them for both `action_log` and `error_log`.
 
 ## Tech Stack
-- Backend: .NET => ASP.NET, Ocelot, EF Core, Dapper, Ocelot, MassTransit, Quartz.NET, MediatR, xUnit, Moq
+- Backend: .NET => ASP.NET, EF Core, Dapper, Ocelot, MassTransit, Quartz.NET, MediatR, xUnit, Moq
 - Database: Postgres
 - Message Borker: RabbitMQ
 - Fronted: TypeScript and Vue.JS
